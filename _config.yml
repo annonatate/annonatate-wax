@@ -1,4 +1,3 @@
-baseurl: /annonatate-wax
 collections:
   annotations:
     output: true
