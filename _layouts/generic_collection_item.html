@@ -1,12 +1,5 @@
 ---
 layout: default
-image_viewer: 'openseadragon'
-meta:
-  - label: 'Label'
-    value: page.label
-  - label: 'IIIF Manifest'
-    value: page.manifest
-    type:  link
 ---
 
 {% comment %}
@@ -19,6 +12,10 @@ meta:
   {% assign viewer = page.image_viewer %}
 {% elsif layout.image_viewer %}
   {% assign viewer = layout.image_viewer %}
+{% elsif page.manifest %}
+  {% assign viewer = 'openseadragon' %}
+{% else %}
+  {% assign viewer = 'default' %}
 {% endif %}
 
 {% if viewer %}
@@ -42,6 +39,12 @@ meta:
   {% assign metadata = layout.meta %}
 {% elsif page.meta.size %}
   {% assign metadata = page.meta %}
+{% elsif site.search.main.collections[page.collection].size %}
+  {% assign metadata = "" | split: "" %}
+  {% for item in site.search.main.collections[page.collection].fields %}
+  {% assign pluspage = item | prepend: 'page.' %}
+  {% assign metadata = metadata | push: pluspage %}
+{% endfor %}
 {% endif %}
 {% if metadata.size %}
   {% include item_metadata.html meta=metadata %}
